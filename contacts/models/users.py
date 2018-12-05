@@ -10,9 +10,6 @@ class Users(db.Model):
     passwd_digest = db.Column(db.String(200), nullable=False)
     joined_on = db.Column(db.DateTime(), default=datetime.utcnow)
 
-    # one to many for a users contact list
-    contacts = db.relationship('Records', lazy='dynamic')
-
     def __init__(self, **kwargs):
         super(Users, self).__init__(**kwargs)
 

@@ -34,12 +34,14 @@ class RecordsResource(Resource):
     def post(self):
         schema = RecordSchema()
         if not request.is_json:
-
             return make_response(
                 jsonify(msg='Missing JSON in request'), 400)
         rec, errors = schema.load(request.json)
         if errors:
             return errors, 422
+
+        curruser = get_current_user()
+        rec.user = curruser
         db.session.add(rec)
         try:
             db.session.commit()
