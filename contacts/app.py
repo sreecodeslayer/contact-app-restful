@@ -1,7 +1,7 @@
 from flask import Flask
 
-from contacts import auth, api
-from contacts.extensions import db, jwt
+from . import auth, api
+from .extensions import db, jwt, migrate
 from .helpers import loadconf
 
 
@@ -38,6 +38,7 @@ def configure_extensions(app, cli):
     '''
     db.init_app(app)
     jwt.init_app(app)
+    migrate.init_app(app, db)
 
 
 def register_blueprints(app):
