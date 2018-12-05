@@ -1,4 +1,4 @@
-from flask import request, jsonify, Blueprint
+from flask import request, jsonify, Blueprint, make_response
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
@@ -8,9 +8,9 @@ from flask_jwt_extended import (
 
 from contacts.models import Users
 from contacts.schemas import UserSchema
-from contacts.extensions import pwd_context, jwt
+from contacts.extensions import pwd_context, jwt, db
 
-from mongoengine.errors import NotUniqueError
+# from mongoengine.errors import NotUniqueError
 
 blueprint = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -54,9 +54,12 @@ def signup():
         return jsonify(errors), 422
     try:
         user.passwd_digest = pwd_context.hash(user.passwd_digest)
-        user.save()
-    except NotUniqueError as e:
-        return jsonify({'msg': 'User exists with under that email/username'}), 422
+        db.session.add(user)
+        db.session.commit()
+    except Exception as e:
+        raise
+        return make_response(
+            jsonify(msg='User exists with under that email/username'), 422)
 
     return schema.jsonify(user)
 

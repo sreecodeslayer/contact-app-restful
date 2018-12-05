@@ -5,32 +5,22 @@ class Development:
     DEBUG = True
     SECRET_KEY = "changeme"
 
-    HOST = 'localhost'
-    PORT = 27017
-    DB = 'CONTACTS'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@localhost/contacts'
 
-    MONGODB_SETTINGS = [{
-        'db': DB,
-        'host': HOST,
-        'port': PORT
-    }]
+    # Suppress SQLALCHEMY_TRACK_MODIFICATIONS overhead warning
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class Production(Development):
-	DEBUG = False
+    DEBUG = False
     SECRET_KEY = "sup3rs3cr3tk3yf0rPr0duct10N"
-    HOST = os.getenv('MONGO_HOST','localhost')
-    PORT = os.getenv('MONGO_HOST',27017)
-
-
-    MONGODB_SETTINGS = [{
-        'db': DB,
-        'host': HOST,
-        'port': PORT
-    }]
+    SQLALCHEMY_DATABASE_URI = os.getenv(
+        'SQLALCHEMY_DATABASE_URI',
+        'postgresql://localhost/contacts'
+    )
 
 
 configuration = {
-	'dev':Development,
-	'production':Production
+    'dev': Development,
+    'production': Production
 }

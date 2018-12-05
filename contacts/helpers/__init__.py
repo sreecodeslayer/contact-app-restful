@@ -1,11 +1,12 @@
 from .paginator import paginate
+from ..config import configuration
 import os
 
 
-def load_conf():
+def loadconf():
     '''
     Load the server configuration
     '''
     env = os.getenv('CONTACTS_ENV', 'dev').lower()
-    config = conf[env]
+    config = configuration[env]
     return config
