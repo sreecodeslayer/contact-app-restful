@@ -40,7 +40,8 @@ def login():
 
 @blueprint.route('/signup', methods=['POST'])
 def signup():
-    '''Authenticate user and return token
+    '''
+    Add a new user to the platform
     '''
     if not request.is_json:
         return jsonify({'msg': 'Missing JSON in request'}), 400

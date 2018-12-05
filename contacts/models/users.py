@@ -1,5 +1,5 @@
-from ..extensions import db, pwd_context
-from datetime import datetime, timedelta
+from ..extensions import db
+from datetime import datetime
 
 
 class Users(db.Model):
@@ -9,10 +9,6 @@ class Users(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     passwd_digest = db.Column(db.String(200), nullable=False)
     joined_on = db.Column(db.DateTime(), default=datetime.utcnow)
-
-    meta = {
-        'indexes': ['username', 'email']
-    }
 
     def __init__(self, **kwargs):
         super(Users, self).__init__(**kwargs)
