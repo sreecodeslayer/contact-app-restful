@@ -24,7 +24,21 @@ class Production(Development):
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(7)
 
 
+class Testing(Development):
+    DEBUG = True
+    TESTING = True
+    SECRET_KEY = "testsecret"
+    JWT_ACCESS_TOKEN_EXPIRES = False
+
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres'\
+        '@localhost/contacts_test'
+
+    # Suppress SQLALCHEMY_TRACK_MODIFICATIONS overhead warning
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+
 configuration = {
     'dev': Development,
-    'production': Production
+    'production': Production,
+    'test': Testing
 }

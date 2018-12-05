@@ -26,7 +26,7 @@ def configure_app(app, testing=False):
 
     if testing is True:
         # override with testing config
-        app.config.from_object('contacts.configtest')
+        app.config.from_object('contacts.config.Testing')
     else:
         # override with env variable, fail silently if not set
         app.config.from_envvar(
