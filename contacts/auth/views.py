@@ -1,7 +1,6 @@
 from flask import request, jsonify, Blueprint, make_response
 from flask_jwt_extended import (
     create_access_token,
-    create_refresh_token,
     jwt_refresh_token_required,
     get_jwt_identity
 )
@@ -9,6 +8,7 @@ from flask_jwt_extended import (
 from contacts.models import Users
 from contacts.schemas import UserSchema
 from contacts.extensions import pwd_context, jwt, db
+from sqlalchemy import exc
 
 # from mongoengine.errors import NotUniqueError
 
@@ -20,25 +20,22 @@ def login():
     '''Authenticate user and return token
     '''
     if not request.is_json:
-        return jsonify({'msg': 'Missing JSON in request'}), 400
+        return make_response(
+            jsonify(msg='Missing JSON in request'), 400)
 
     username = request.json.get('username')
     password = request.json.get('password')
     if not username or not password:
-        return jsonify({'msg': 'Missing username or password'}), 400
+        return make_response(
+            jsonify(msg='Missing username or password'), 400)
 
-    user = Users.objects.get_or_404(username=username)
+    user = Users.query.filter_by(username=username).first_or_404()
     if not pwd_context.verify(password, user.passwd_digest):
         return jsonify({'msg': 'User creds invalid'}), 400
 
     access_token = create_access_token(identity=str(user.id))
-    refresh_token = create_refresh_token(identity=str(user.id))
-
-    ret = {
-        'access_token': access_token,
-        'refresh_token': refresh_token
-    }
-    return jsonify(ret), 200
+    return make_response(
+        jsonify(access_token=access_token), 200)
 
 
 @blueprint.route('/signup', methods=['POST'])
@@ -51,29 +48,19 @@ def signup():
 
     user, errors = schema.load(request.json)
     if errors:
-        return jsonify(errors), 422
+        return make_response(
+            jsonify(errors), 422)
+    user.passwd_digest = pwd_context.hash(
+        user.passwd_digest)
     try:
-        user.passwd_digest = pwd_context.hash(user.passwd_digest)
         db.session.add(user)
         db.session.commit()
-    except Exception as e:
-        raise
+    except exc.IntegrityError as e:
         return make_response(
             jsonify(msg='User exists with under that email/username'), 422)
-
     return schema.jsonify(user)
-
-
-@blueprint.route('/refresh', methods=['POST'])
-@jwt_refresh_token_required
-def refresh():
-    current_user = get_jwt_identity()
-    ret = {
-        'access_token': create_access_token(identity=current_user)
-    }
-    return jsonify(ret), 200
 
 
 @jwt.user_loader_callback_loader
 def user_loader_callback(identity):
-    return User.objects.get(id=identity)
+    return Users.query.get(id=identity)
