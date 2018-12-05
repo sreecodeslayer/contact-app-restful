@@ -7,7 +7,7 @@ from flask_jwt_extended import (
 
 from contacts.models import Users
 from contacts.schemas import UserSchema
-from contacts.extensions import pwd_context, jwt, db
+from contacts.extensions import jwt, db
 from sqlalchemy import exc
 
 # from mongoengine.errors import NotUniqueError
@@ -30,8 +30,10 @@ def login():
             jsonify(msg='Missing username or password'), 400)
 
     user = Users.query.filter_by(username=username).first_or_404()
-    if not pwd_context.verify(password, user.passwd_digest):
-        return jsonify({'msg': 'User creds invalid'}), 400
+    if not user.check_password(password):
+        return make_response(
+            jsonify(msg='User creds invalid'), 400
+        )
 
     access_token = create_access_token(identity=str(user.id))
     return make_response(
@@ -51,8 +53,7 @@ def signup():
     if errors:
         return make_response(
             jsonify(errors), 422)
-    user.passwd_digest = pwd_context.hash(
-        user.passwd_digest)
+    user.set_password(user.passwd_digest)
     try:
         db.session.add(user)
         db.session.commit()
