@@ -5,7 +5,7 @@ from contacts.extensions import db
 from contacts.models import Users, Records
 
 
-class UserModelTestCase(unittest.TestCase):
+class ContactModelTestCase(unittest.TestCase):
     def setUp(self):
         self.app = create_app(testing=True)
         self.app_context = self.app.app_context()
