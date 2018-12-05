@@ -64,4 +64,4 @@ def signup():
 
 @jwt.user_loader_callback_loader
 def user_loader_callback(identity):
-    return Users.query.get(id=identity)
+    return Users.query.get(identity)
