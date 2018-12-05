@@ -1,11 +1,14 @@
 import os
+from datetime import timedelta
 
 
 class Development:
     DEBUG = True
     SECRET_KEY = "changeme"
+    JWT_ACCESS_TOKEN_EXPIRES = False
 
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@localhost/contacts'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres'\
+        '@localhost/contacts'
 
     # Suppress SQLALCHEMY_TRACK_MODIFICATIONS overhead warning
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -18,6 +21,7 @@ class Production(Development):
         'SQLALCHEMY_DATABASE_URI',
         'postgresql://localhost/contacts'
     )
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(7)
 
 
 configuration = {
