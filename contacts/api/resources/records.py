@@ -1,6 +1,8 @@
 from flask_restful import Resource
 from flask_jwt_extended import get_current_user, jwt_required
 from flask import jsonify, request, make_response
+from sqlalchemy import exc
+
 from ...models import Records
 from ...schemas import RecordSchema
 from ...extensions import db
@@ -45,8 +47,9 @@ class RecordsResource(Resource):
         db.session.add(rec)
         try:
             db.session.commit()
-        except Exception as e:
-            raise
+        except exc.IntegrityError:
+            return make_response(
+                jsonify(msg='A contact exists for that email'), 409)
         return schema.jsonify(rec)
 
     def delete(self):
