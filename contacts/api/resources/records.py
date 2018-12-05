@@ -20,7 +20,32 @@ class RecordResource(Resource):
         return schema.jsonify(rec)
 
     def patch(self, rid):
-        pass
+        schema = RecordSchema(partial=True)
+        if not request.is_json:
+            return make_response(
+                jsonify(msg='Missing JSON in request'), 400)
+        _, errors = schema.load(request.json)
+        if errors:
+            return errors, 422
+
+        curruser = get_current_user()
+        rec = curruser.contacts.filter_by(id=rid).first_or_404()
+        name = request.json.get('name')
+        if name:
+            rec.name = name
+        surname = request.json.get('surname')
+        rec.surname = surname
+        mobile = request.json.get('mobile')
+        if mobile:
+            rec.mobile = mobile
+
+        db.session.add(rec)
+        try:
+            db.session.commit()
+        except exc.IntegrityError:
+            return make_response(
+                jsonify(msg='A contact exists for that email'), 409)
+        return schema.jsonify(rec)
 
     def delete(self, rid):
         schema = RecordSchema()
@@ -59,6 +84,3 @@ class RecordsResource(Resource):
             return make_response(
                 jsonify(msg='A contact exists for that email'), 409)
         return schema.jsonify(rec)
-
-    def delete(self):
-        pass
