@@ -16,14 +16,19 @@ class RecordResource(Resource):
     def get(self, rid):
         schema = RecordSchema()
         curruser = get_current_user()
-        rec = curruser.contacts.query.first_or_404(id=rid)
+        rec = curruser.contacts.filter_by(id=rid).first_or_404()
         return schema.jsonify(rec)
 
     def patch(self, rid):
         pass
 
     def delete(self, rid):
-        pass
+        schema = RecordSchema()
+        curruser = get_current_user()
+        rec = curruser.contacts.filter_by(id=rid).first_or_404()
+        db.session.delete(rec)
+        db.session.commit()
+        return jsonify(msg='Contact removed')
 
 
 class RecordsResource(Resource):
