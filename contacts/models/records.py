@@ -11,7 +11,7 @@ class Records(db.Model):
     mobile = db.Column(db.String(20), nullable=True, unique=True)
     created_on = db.Column(db.DateTime(), default=datetime.utcnow)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     # one to many for a users contact list
     user = db.relationship(
         'Users', backref=db.backref('contacts', lazy='dynamic'))
