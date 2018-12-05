@@ -6,6 +6,7 @@ from sqlalchemy import exc
 from ...models import Records
 from ...schemas import RecordSchema
 from ...extensions import db
+from ...helpers.paginator import paginate
 
 
 class RecordResource(Resource):
@@ -31,7 +32,9 @@ class RecordsResource(Resource):
 
     def get(self):
         schema = RecordSchema(many=True)
-        pass
+        curruser = get_current_user()
+        recs = curruser.contacts
+        return paginate(recs, schema)
 
     def post(self):
         schema = RecordSchema()
