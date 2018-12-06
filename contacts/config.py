@@ -5,6 +5,13 @@ from datetime import timedelta
 class Development:
     DEBUG = True
     SECRET_KEY = "changeme"
+
+    # Skipping the below configuration would trigger a 500
+    # on bad api request with no auth headers case
+    # Read more at flask jwt extended issue 86
+    # https://github.com/vimalloc/flask-jwt-extended/issues/86
+    PROPAGATE_EXCEPTIONS = True
+
     JWT_ACCESS_TOKEN_EXPIRES = False
 
     SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres'\
