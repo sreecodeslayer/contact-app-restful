@@ -63,7 +63,14 @@ class RecordsResource(Resource):
     def get(self):
         schema = RecordSchema(many=True)
         curruser = get_current_user()
+        search_query = request.args.get('q')
         recs = curruser.contacts
+        if search_query:
+            recs = recs.filter(
+                (Records.name.contains(search_query)) | (
+                    Records.email.contains(search_query)
+                )
+            )
         return paginate(recs, schema)
 
     def post(self):
