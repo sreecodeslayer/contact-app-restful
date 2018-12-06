@@ -43,3 +43,5 @@ Configurations regarding Postgres Connection is inside `contacts/config.py` and 
 ### Testing
 1. Testing covers unit tests for User model and Records model (contacts table)
 2. Testing also covers different aspects of API integration with the models like the Login/Signup cases, Auth based API requests for CRUD of contacts.
+
+> This project was initiated using the cookiecutter from my github [repo](https://github.com/sreecodeslayer/cookiecutter-flask-restful)
