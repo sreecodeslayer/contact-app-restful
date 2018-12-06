@@ -44,7 +44,7 @@ class RecordResource(Resource):
             db.session.commit()
         except exc.IntegrityError:
             return make_response(
-                jsonify(msg='A contact exists for that email'), 409)
+                jsonify(msg='A contact exists for that email/mobile'), 409)
         return schema.jsonify(rec)
 
     def delete(self, rid):
@@ -89,5 +89,5 @@ class RecordsResource(Resource):
             db.session.commit()
         except exc.IntegrityError:
             return make_response(
-                jsonify(msg='A contact exists for that email'), 409)
+                jsonify(msg='A contact exists for that email/mobile'), 409)
         return schema.jsonify(rec)
