@@ -166,3 +166,40 @@ class ContactApiTestCase(unittest.TestCase):
             headers=self.get_auth_headers()
         )
         self.assertEqual(response.status_code, 404)
+
+    def test_contacts_search_integration(self):
+        # SEARCH THE CONTACT
+        payload = {
+            'name': 'Test - searchable',
+            'surname': 'Surname',
+            'email': 'testsearch@example.com',
+            'mobile': '+910123456780'
+        }
+        response = self.client.post(
+            self.baseURL + '/contacts',
+            json=payload,
+            headers=self.get_auth_headers()
+        )
+
+        # Relevant entry
+        response = self.client.get(
+            self.baseURL + '/contacts?q=searchable',
+            headers=self.get_auth_headers()
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json.get('results')[0].get('name'),
+            payload.get('name')
+        )
+
+        # Irrelevant entry
+        response = self.client.get(
+            self.baseURL + '/contacts?q=unrelatedinput',
+            headers=self.get_auth_headers()
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertLess(
+            len(response.json.get('results')),
+            1
+        )
