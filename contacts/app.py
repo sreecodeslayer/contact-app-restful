@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 
 from . import auth, api
 from .extensions import db, jwt, migrate
@@ -10,12 +10,18 @@ def create_app(config=None, testing=False, cli=False):
     '''
     app = Flask('CONTACTS')
 
+    add_ping_pong(app)
+
     configure_app(app, testing)
     configure_extensions(app, cli)
     register_blueprints(app)
 
     return app
 
+def add_ping_pong(app):
+    @app.route("/ping")
+    def ping():
+        return jsonify(msg="pong")
 
 def configure_app(app, testing=False):
     '''set configuration for application
