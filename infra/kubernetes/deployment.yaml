@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contacts-rest-deployment
+  namespace: production-contacts-rest
+
+spec:
+  selector:
+    matchLabels:
+      app: contacts-rest
+  template:
+    metadata:
+      labels:
+        app: contacts-rest
+    spec:
+      containers:
+        - name: contacts-rest
+          envFrom:
+            - configMapRef:
+                name: contacts-rest-secrets
+
+          image: <DOCKUP_ECR_IMAGE>
+          imagePullPolicy: Always
+
+          command:
+          ports:
+          - containerPort: 8000
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ping
+              port: 8000
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 200m
+              memory: 750Mi
+            requests:
+              cpu: 200m
+              memory: 750Mi

@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: contacts-rest-ingress
+  namespace: production-contacts-rest
+
+spec:
+  rules:
+  - host: <ELB LINK>
+    http:
+      paths:
+      - backend:
+          serviceName: contacts-rest-service
+          servicePort: 8000

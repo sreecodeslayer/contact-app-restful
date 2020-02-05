@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: contacts-rest-service
+  namespace: production-contacts-rest
+
+spec:
+  ports:
+  - name: contacts-rest-port-8000
+    port: 8000
+    protocol: TCP
+    targetPort: 8000
+  selector:
+    app: contacts-rest
