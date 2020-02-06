@@ -29,6 +29,7 @@ module "vpc" {
   public_subnet_tags = {
     "kubernetes.io/cluster/${var.project_name}" = "shared"
     "kubernetes.io/role/elb"                      = "1"
+  }
 
   # Kubernetes knows to use only those subnets for internal load balancers
   private_subnet_tags = {
