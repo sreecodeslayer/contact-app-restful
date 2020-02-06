@@ -162,10 +162,10 @@ resource "aws_codebuild_project" "dockup" {
   # Using kustomize in buildspec to change image tag in the deployment yaml
   # files to latest commit sha
   source {
-    type                = "GITHUB"
+    type = "GITHUB"
 
     auth {
-      type = "OAUTH"
+      type     = "OAUTH"
       resource = aws_codebuild_source_credential.dockup.id
     }
 

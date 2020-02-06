@@ -30,15 +30,15 @@ resource "aws_security_group" "worker-nodes" {
 resource "aws_security_group" "nodes-rds-security" {
   name_prefix = "${var.project_name}-eks-nodes-rds"
   vpc_id      = module.vpc.vpc_id
-  description              = "Allow all nodes from the worker groups to communicate with RDS"
+  description = "Allow all nodes from the worker groups to communicate with RDS"
 
   ingress {
-    from_port                = 5432
-    protocol                 = "tcp"
+    from_port = 5432
+    protocol  = "tcp"
 
     # The line below makes sure that, only the nodes from the security group above has access to RDS through tcp/5432!
     security_groups = [aws_security_group.worker-nodes.id]
 
-    to_port                  = 5432
+    to_port = 5432
   }
 }

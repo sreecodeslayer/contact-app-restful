@@ -25,8 +25,8 @@ EOF
 
 # https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/7.0.0
 module "eks" {
-    source  = "terraform-aws-modules/eks/aws"
-    version = "7.0.0"
+  source  = "terraform-aws-modules/eks/aws"
+  version = "7.0.0"
 
   cluster_name = var.project_name
 
@@ -34,7 +34,7 @@ module "eks" {
   vpc_id = module.vpc.vpc_id
 
   #  A list of subnets to place the EKS cluster and workers within
-  subnets      = module.vpc.private_subnets
+  subnets = module.vpc.private_subnets
 
   tags = {
     Name        = var.project_name
@@ -59,5 +59,5 @@ module "eks" {
 
   # Use the policy from above to let worker nodes to pull images from ECR
   workers_additional_policies = [aws_iam_policy.ecr-eks-policy.arn]
-  map_users                            = var.cluster_admins_arns
+  map_users                   = var.cluster_admins_arns
 }

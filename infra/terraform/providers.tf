@@ -18,5 +18,5 @@ provider "kubernetes" {
   # Use Token and certificate from above to authenticate with K8s master instead of Kubeconfig
   # for CIs where file creation is not possible:
   # IRONY: Can't use Kubeconfig in TF Cloud [facepalm]
-  load_config_file       = false
+  load_config_file = false
 }

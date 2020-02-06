@@ -49,17 +49,17 @@ variable "aws_region" {
 }
 
 variable "AWS_ACCESS_KEY_ID" {
-  type = string
+  type        = string
   description = "AWS ACCESS ID"
 }
 
 variable "AWS_SECRET_ACCESS_KEY" {
-  type = string
+  type        = string
   description = "AWS SECRET KEY"
 }
 
 variable "cluster_admins_arns" {
-  type = list
-  default = []
+  type        = list
+  default     = []
   description = "List of ARNs to be added for cluster access"
 }
