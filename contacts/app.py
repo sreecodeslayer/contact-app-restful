@@ -18,10 +18,12 @@ def create_app(config=None, testing=False, cli=False):
 
     return app
 
+
 def add_ping_pong(app):
     @app.route("/ping")
     def ping():
         return jsonify(msg="pong")
+
 
 def configure_app(app, testing=False):
     '''set configuration for application
