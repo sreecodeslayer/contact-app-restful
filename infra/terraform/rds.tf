@@ -63,4 +63,6 @@ module "db" {
 
   # Database Deletion Protection :  The database can't be deleted when this value is set to true
   deletion_protection = false
+  family = "postgres9.5"
+  major_engine_version = "9.5"
 }
