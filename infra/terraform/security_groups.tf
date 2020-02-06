@@ -35,7 +35,10 @@ resource "aws_security_group" "nodes-rds-security" {
   ingress {
     from_port                = 5432
     protocol                 = "tcp"
+
+    # The line below makes sure that, only the nodes from the security group above has access to RDS through tcp/5432!
     security_groups = [aws_security_group.worker-nodes.id]
+
     to_port                  = 5432
   }
 }

@@ -33,6 +33,7 @@ resource "aws_iam_role" "dockup-codebuild" {
 EOF
 }
 
+# Cloudwatch for logs [Optional]
 resource "aws_cloudwatch_log_group" "dockup" {
   name = "${var.project_name}-cloudbuild-group"
 
@@ -68,7 +69,7 @@ resource "aws_iam_role_policy" "codebuild" {
   # "ecr:UploadLayerPart" - Uploads an image layer
   # "cloudtrail:LookupEvents" - See api calls events made while running build spec
 
-  # Cloudbuild always trying to access resourse "*" when logging in to ecr. So
+  # Codebuild always try to access resource "*" when logging in to ecr. So
   # couldn't specify ECR arn in resource.
 
   policy = <<POLICY
@@ -149,7 +150,7 @@ resource "aws_codebuild_project" "dockup" {
   #    the environment image type (eg: linux or windows) we use
   #
   # 2. EKS Cluster should already be running with required resources
-  #    (eg, secrets, services) or else codebuild will fail on on "upadte-kubeconfig" step
+  #    (eg, secrets, services) or else codebuild will fail on on "update-kubeconfig" step
   #
   # 3. If build environment image type is changed to "Amazon linux 2" or
   #    "aws/codebuild/standard:2.0" runtime versions should be included
