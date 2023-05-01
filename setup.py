@@ -3,7 +3,7 @@ dev_requires = ['pytest == 4.0.1']
 requires = [
     'flask-jwt-extended == 3.13.1',
     'flask-marshmallow == 0.9.0',
-    'flask == 1.0.2',
+    'flask == 2.3.2',
     'flask-restful == 0.3.6',
     'marshmallow == 2.16.3',
     'passlib == 1.7.1',
