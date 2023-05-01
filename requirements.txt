@@ -6,7 +6,7 @@
 # contacts/app.py: 1
 # contacts/auth/views.py: 1
 # contacts/helpers/paginator.py: 3
-flask == 1.0.2
+flask == 2.3.2
 
 # contacts/api/resources/user.py: 3
 # contacts/auth/views.py: 2
